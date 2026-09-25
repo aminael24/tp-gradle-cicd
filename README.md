@@ -1,33 +1,51 @@
-# Simple Gradle Java APP
-Simple Java App Created with Gradle
+B.1)Le dépôt local est sur notre machine. Le dépôt distant sert à partager le projet entre plusieurs développeurs.
 
-Please read this Article to make the best use of this git repo
+c.4-Pour relier DEV1 au dépôt distant :git remote add origin $REMOTE
 
-[https://adityasridhar.com/posts/how-to-get-started-with-gradle](https://adityasridhar.com/posts/how-to-get-started-with-gradle)
+c.7-À committer : src/, gradle/,gradlew, build.gradle, settings.gradle, README.md.
 
-## Cloning the Code
+À ignorer :.gradle/, build/,.DS_Store on les ajoute dans .gitignore
 
-Clone this code into your local using the following command
+c.7 — Contenu de REMOTE :on trouve surtout les fichiers internes Git comme HEAD, objects, refs, config.
 
-`git clone https://github.com/aditya-sridhar/simple-gradle-java-app.git`
+On ne trouve pas directement les fichiers du projet car c'est un dépôt bare.
 
-## Building the Application 
+c.11-DEV1, DEV2 et REMOTE ont le même historique après la synchronisation.
 
-The application can be built using the following command 
+D.4.a-Le nouveau commit de DEV1 n'apparaît pas encore dans DEV2 car DEV2 ne l'a pas récupéré.
 
-**Windows** : `gradlew.bat build`
+D.4.b-git fetch  récupère les nouveaux commits mais ne change pas la branche locale master.
 
-**Linux/MacOS**: `./gradlew build`
+D.4.c-App.java ne change pas après le fetch.
 
-## Running the Application
+D.4.d-Pour mettre la branche locale à jour :git merge origin/master
 
-The application can be run using the following command 
+D.6.a-git pull fait directement git fetch puis git merge.
 
-**Windows** : `gradlew.bat run`
+E.4-Il y a un conflit car DEV1 et DEV2 ont modifié la même partie du fichier.
 
-**Linux/MacOS**: `./gradlew run`
+On corrige le fichier manuellement puis :
 
-## Tests
+git add .
 
-After the Application is built using the Build command, the test results report can be found in below file
-*build/reports/tests/test/index.html*
+git commit
+
+E.7.b-Le push est refusé car DEV2 n'a pas le dernier commit présent sur REMOTE.
+
+Il faut d'abord récupérer les changements puis résoudre le conflit.
+
+git fetch origin
+
+git merge origin/master
+
+E.8-Après avoir résolu le conflit :
+
+git add .
+
+git commit
+
+git push
+
+Puis DEV1 fait un git pull
+
+À la fin, les dépôts sont au même niveau.

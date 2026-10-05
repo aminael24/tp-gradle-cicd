@@ -1,0 +1,22 @@
+image: eclipse-temurin:11-jdk
+
+stages:
+  - build
+  - test
+
+before_script:
+  - chmod +x gradlew
+
+compile:
+  stage: build
+  script:
+    - ./gradlew --no-daemon assemble
+
+tests:
+  stage: test
+  script:
+    - ./gradlew --no-daemon test
+  artifacts:
+    when: always
+    reports:
+      junit: build/test-results/test/TEST-*.xml

@@ -36,3 +36,22 @@ docker_build:
 
   only:
     - develop
+docker_release:
+  stage: docker
+  image: docker:29.1.4
+
+  services:
+    - docker:29.1.4-dind
+
+  script:
+    - |
+      if ! echo "$CI_COMMIT_TAG" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+        echo "Tag invalide : $CI_COMMIT_TAG"
+        exit 1
+      fi
+    - docker build --no-cache --provenance=false -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" .
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+
+  rules:
+    - if: '$CI_COMMIT_TAG'
